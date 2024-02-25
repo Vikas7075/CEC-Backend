@@ -30,8 +30,12 @@ const userSchema = new mongoose.Schema({
         type: String,
         maxlength: 500
     },
+    userType: {
+        type: String,
+    },
     profilePicture: {
-        type: String
+        type: String,
+        required: true,
     },
     experience: [
         {
@@ -49,6 +53,34 @@ const userSchema = new mongoose.Schema({
         type: String,
         maxlength: 50 // Adjust max length based on your requirements
     }],
+    //username, email, password, skills, country, city, bio, College, degree, startDate, endDate, employee, designation, achievements
+    country: {
+        type: String
+    },
+    city: {
+        type: String
+    },
+    college: {
+        type: String
+    },
+    degree: {
+        type: String
+    },
+    designation: {
+        type: String
+    },
+    currentEmployee: {
+        type: String
+    },
+    achievements: {
+        type: String
+    },
+    startDate: {
+        type: String
+    },
+    endDate: {
+        type: String
+    },
     connections: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'

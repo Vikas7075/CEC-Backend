@@ -1,13 +1,18 @@
 import { Post } from "../../models/Post/post.model.js"
-
-
+import multer from 'multer';
+import cloudinary from 'cloudinary';
+import { v2 as cloudinaryV2 } from 'cloudinary';
+import { User } from "../../models/User.js";
 //Get All Posts
 export const getAllPosts = async (req, res) => {
+
     try {
-        const posts = await Post.find().populate('user', 'username');  // Populate the 'user' field with the username
+        const posts = await Post.find().populate('user', 'username headline profilePicture');
+
         res.status(200).json({
             success: true,
-            posts
+            posts,
+
         })
 
     } catch (error) {
@@ -18,21 +23,30 @@ export const getAllPosts = async (req, res) => {
 
 // create a new post
 
+// Multer storage configuration for uploading files
+const storage = multer.memoryStorage();
+
+// Multer upload configuration
+const upload = multer({ storage });
+
 export const createPost = async (req, res) => {
+    const user = req.user;
+    const { content } = req.body;
+
     try {
-        const { content } = req.body;
-        const newPost = await Post.create({ content, user: req.user._id });
+        // Assuming Post.create() is used to create a new post in the database
+        const newPost = await Post.create({ content, image: req.body.image, user: user.userId });
+
+
         res.status(200).json({
             success: true,
-            newPost
-        })
+            newPost,
+        });
     } catch (error) {
-
-        console.error('Error creating posts:', error);
+        console.error('Error creating post:', error);
         res.status(500).json({ error: 'Internal Server Error' });
-
     }
-}
+};
 
 // update Post 
 export const updatePost = async (req, res) => {

@@ -4,8 +4,8 @@ import { setCookie } from "../utils/features.js";
 
 // creating users
 export const createUser = async (req, res) => {
-    try {
-        const { username, email, password, headline, bio, skills } = req.body;
+    try { //username, email, password, skills, country, city, bio, College, degree, startDate, endDate, employee, designation, achievements
+        const { username, email, password, headline, bio, userType, skills, country, city, college, degree, startDate, endDate, currentEmployee, designation, achievments } = req.body;
 
         const exitingUser = await User.findOne({ email });
 
@@ -17,7 +17,7 @@ export const createUser = async (req, res) => {
         }
         const hashPassword = await bcrypt.hash(password, 10);
         // create a new user 
-        const user = await User.create({ username, email, password: hashPassword, headline, bio, skills })
+        const user = await User.create({ username, profilePicture: req.body.profilePicture, email, password: hashPassword, headline, bio, userType, skills, country, city, college, degree, startDate, endDate, currentEmployee, designation, achievments })
         setCookie(user, res, "Registered Successfully", 201);
     } catch (error) {
         console.error("Error during registration : ", error);
@@ -36,7 +36,7 @@ export const login = async (req, res) => {
         if (!user) {
             return res.status(404).json({
                 success: false,
-                message: 'Invalid email Or Password',
+                message: 'User Not Found...!',
             });
         }
         const isMatch = await bcrypt.compare(password.trim(), user.password);
@@ -77,16 +77,27 @@ export const logout = async (req, res) => {
 }
 
 
-export const getUsers = async (req, res) => {
+
+export const myprofile = async (req, res) => {
+    const user = req.user;
+    // console.log(user)
     try {
-        const users = await User.find();
-        res.json(users);
-        console.log("Gel All users")
+        const fullUserDetails = await User.findById(user.userId);
+
+        if (!fullUserDetails) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        res.status(200).json({
+            success: true,
+            user: fullUserDetails
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
+
 
 export const getUserById = async (req, res) => {
     try {

@@ -12,7 +12,7 @@ export const create = async (req, res) => {
         });
     }
     try {
-        const eduactionObj = { user, institution, degree, start_date, end_date };
+        const eduactionObj = { user: users.userId, institution, degree, start_date, end_date };
         const educations = await Education.create(eduactionObj);
         const updatedUser = await User.findOneAndUpdate(
             { _id: users.userId },
@@ -41,3 +41,64 @@ export const create = async (req, res) => {
         })
     }
 }
+
+// Get education records of a user
+export const getEducation = async (req, res) => {
+    const user = req.user;
+
+    try {
+        const educationRecords = await Education.find({ user: user.userId });
+
+        return res.status(200).json({
+            success: true,
+            education: educationRecords,
+        });
+    } catch (error) {
+        console.error("Error fetching education", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};
+
+// Update education record
+export const updateEducation = async (req, res) => {
+    const user = req.user;
+    const { educationId } = req.params;
+    const { institution, degree, start_date, end_date } = req.body;
+
+    if (!institution || !degree || !start_date) {
+        return res.status(400).json({
+            success: false,
+            message: "Please provide all required details",
+        });
+    }
+
+    try {
+        const updatedEducation = await Education.findOneAndUpdate(
+            { _id: educationId, user: user.userId },
+            { institution, degree, start_date, end_date },
+            { new: true }
+        );
+
+        if (!updatedEducation) {
+            return res.status(404).json({
+                success: false,
+                message: "Education record not found",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Education record updated successfully",
+            education: updatedEducation,
+        });
+    } catch (error) {
+        console.error("Error updating education", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};

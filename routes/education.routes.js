@@ -1,9 +1,11 @@
 import express from 'express';
-import { create } from '../controllers/education.controller.js';
+import { create, getEducation, updateEducation } from '../controllers/education.controller.js';
 import { verifyToken } from '../middleware/auth.middleware.js';
 
 const router = express.Router();
 
-router.post('/create', verifyToken, create);
+router.post('/', verifyToken, create);
+router.get('/', verifyToken, getEducation);
+router.put('/:educationId', verifyToken, updateEducation);
 
 export default router;

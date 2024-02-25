@@ -5,10 +5,10 @@ const likeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Post"
     },
-    userId: {
+    likedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User"
-    }
+    },
 }, { timestamps: true })
 
 export const Like = mongoose.model("Like", likeSchema);
