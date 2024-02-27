@@ -9,5 +9,5 @@ dotenv.config({
 
 ConnectDb();
 app.listen(process.env.PORT, (req, res) => {
-    console.log(`Server is listening on PORT ${process.env.PORT}`)
+    console.log(`Server is listening on PORT ${process.env.PORT} in ${process.env.Node_env} Mode `)
 })

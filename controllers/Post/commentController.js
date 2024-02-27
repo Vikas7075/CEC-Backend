@@ -1,7 +1,7 @@
 import { isValidObjectId } from "mongoose";
 import { Post } from "../../models/Post/post.model.js";
 import { Comment } from "../../models/Post/comment.model.js";
-import { ApiResponse } from "../../utils/apiResponse.js";
+import { ApiResponse } from "../../utils/ApiResponse.js";
 
 // Controller to add a comment to a post
 export const addCommentToPost = async (req, res) => {
@@ -36,7 +36,10 @@ export const addCommentToPost = async (req, res) => {
         post.comments.push(comment._id);
         await post.save();
 
-        return res.status(201).json(new ApiResponse(200, { comment }, "Comment added successfully"));
+        return res.status(201).json({
+            success:true,
+            message:"Comment added Successfully"
+        })
     } catch (error) {
         console.error("Error adding comment to post:", error);
         return res.status(500).json({

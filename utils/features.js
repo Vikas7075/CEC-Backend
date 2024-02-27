@@ -6,7 +6,9 @@ export const setCookie = (user, res, message, statusCode = 200) => {
     // set cookie with the jwt token
     res.cookie('token', token, {
         httpOnly: true,
-        maxAge: 30 * 60 * 1000
+        maxAge: 30 * 60 * 1000,
+        sameSite: process.env.Node_env === "development" ? "lax" : "none",
+        secure: process.env.Node_env === "development" ? false : true
     })
 
     // set status code and send response
