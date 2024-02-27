@@ -21,6 +21,21 @@ export const getAllPosts = async (req, res) => {
     }
 }
 
+// get post by userId
+export const getPostById = async (req, res) => {
+    const { userId } = req.params;
+    try {
+        const post = await Post.find({ user: userId });
+        res.status(200).json({
+            success: true,
+            post
+        })
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 // create a new post
 
 // Multer storage configuration for uploading files

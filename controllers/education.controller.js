@@ -44,10 +44,16 @@ export const create = async (req, res) => {
 
 // Get education records of a user
 export const getEducation = async (req, res) => {
-    const user = req.user;
-
+    const { userId } = req.params;
     try {
-        const educationRecords = await Education.find({ user: user.userId });
+        const educationRecords = await Education.find({ user: userId });
+
+        if (!educationRecords) {
+            return res.status(404).json({
+                success: false,
+                message: "Education records not found for the user"
+            });
+        }
 
         return res.status(200).json({
             success: true,
@@ -96,6 +102,48 @@ export const updateEducation = async (req, res) => {
         });
     } catch (error) {
         console.error("Error updating education", error);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error",
+        });
+    }
+};
+// Delete education record
+export const deleteEducation = async (req, res) => {
+    const user = req.user;
+    const { educationId } = req.params;
+
+    try {
+        const deletedEducation = await Education.findOneAndDelete({ _id: educationId, user: user.userId });
+
+        if (!deletedEducation) {
+            return res.status(404).json({
+                success: false,
+                message: "Education record not found",
+            });
+        }
+
+        // remove education ID from user's education array
+        const updatedUser = await User.findByIdAndUpdate(
+            user.userId,
+            { $pull: { education: educationId } },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            console.error("User not found");
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Education record deleted successfully",
+        });
+    } catch (error) {
+        console.error("Error deleting education", error);
         return res.status(500).json({
             success: false,
             message: "Internal server error",

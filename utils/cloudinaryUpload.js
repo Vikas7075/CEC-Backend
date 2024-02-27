@@ -5,9 +5,9 @@ import path from 'path';
 
 // Configure Cloudinary
 cloudinary.config({
-    cloud_name: 'dyulwgfs1',
-    api_key: '925568674871672',
-    api_secret: 'Mn4Dc3cLi6jtQdPJ8KrjsEaTafs'
+    cloud_name: process.env.cloud_name,
+    api_key: process.env.api_key,
+    api_secret: process.env.api_secret
 });
 
 

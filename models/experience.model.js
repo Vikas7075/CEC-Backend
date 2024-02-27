@@ -1,7 +1,10 @@
 import mongoose from 'mongoose';
 
 const experienceSchema = new mongoose.Schema({
-
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    },
     position: {
         type: String,
         required: true
@@ -11,11 +14,11 @@ const experienceSchema = new mongoose.Schema({
         required: true
     },
     start_date: {
-        type: String,
+        type: Date,
         required: true
     },
     end_date: {
-        type: String
+        type: Date
     },
     desc: {
         type: String

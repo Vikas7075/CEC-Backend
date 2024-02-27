@@ -10,17 +10,19 @@ import likeRoutes from './routes/Post/like.routes.js';
 import commentRoutes from './routes/Post/comment.routes.js';
 
 
+app.use(express.json())
+// app.use(express.urlencoded({ extended: true, limit: "16kb" }))  // for receiving url data
+app.use(express.static('uploads'))
+
+app.use(cookieParser())  // cookie related data handled and work that receive in user browser
+
 app.use(cors({
     origin: "http://localhost:5173",
     methods: ["POST", "PUT", "GET", "DELETE"],
     credentials: true
 }));
 
-app.use(express.json())
-// app.use(express.urlencoded({ extended: true, limit: "16kb" }))  // for receiving url data
-app.use(express.static('uploads'))
 
-app.use(cookieParser())  // cookie related data handled and work that receive in user browser
 
 // import useRoutes
 app.use("/api/users", userRoutes);

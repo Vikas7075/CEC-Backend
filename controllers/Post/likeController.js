@@ -13,12 +13,13 @@ export const togglePostLike = async (req, res) => {
             });
         }
         // Check if the user has already liked the post
-        const existingLike = await Like.findOne({ postId: postId });
+        const existingLike = await Like.findOne({ postId: postId, likedBy: req.user.userId });
 
         if (existingLike) {
             // If the user has already liked the post, remove the like
             await Like.findByIdAndDelete(existingLike._id);
-
+            // remove the like id from post's likes array
+            await Post.findByIdAndUpdate(postId, { $pull: { likes: existingLike._id } })
 
             return res.status(200).json({
                 success: true,
