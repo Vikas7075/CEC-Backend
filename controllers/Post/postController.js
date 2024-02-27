@@ -25,7 +25,14 @@ export const getAllPosts = async (req, res) => {
 export const getPostById = async (req, res) => {
     const { userId } = req.params;
     try {
-        const post = await Post.find({ user: userId });
+        const post = await Post.find({ user: userId }).populate('user', 'username headline profilePicture')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    select: 'username profilePicture headline' // Populate user details for each comment
+                }
+            });
         res.status(200).json({
             success: true,
             post
