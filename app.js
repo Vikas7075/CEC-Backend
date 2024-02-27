@@ -17,7 +17,7 @@ app.use(express.static('uploads'))
 app.use(cookieParser())  // cookie related data handled and work that receive in user browser
 
 app.use(cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: 'https://cec-frontend.vercel.app',
     methods: ["POST", "PUT", "GET", "DELETE"],
     credentials: true
 }));
