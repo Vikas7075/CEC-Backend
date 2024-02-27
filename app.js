@@ -17,7 +17,7 @@ app.use(express.static('uploads'))
 app.use(cookieParser())  // cookie related data handled and work that receive in user browser
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CORS_ORIGIN,
     methods: ["POST", "PUT", "GET", "DELETE"],
     credentials: true
 }));
