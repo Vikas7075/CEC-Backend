@@ -1,6 +1,7 @@
 import express from 'express'
 export const app = express();
 import cors from 'cors'
+import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser';
 import userRoutes from './routes/userRoutes.js'
 import experianceRoutes from './routes/experiance.routes.js'
@@ -16,8 +17,12 @@ app.use(express.static('uploads'))
 
 app.use(cookieParser())  // cookie related data handled and work that receive in user browser
 
+dotenv.config({
+    path: './.env'
+})
+
 app.use(cors({
-    origin: 'https://cec-frontend.vercel.app',
+    origin: 'http://localhost:5173',
     methods: ["POST", "PUT", "GET", "DELETE"],
     credentials: true
 }));
