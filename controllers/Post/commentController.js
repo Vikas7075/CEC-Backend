@@ -25,7 +25,7 @@ export const addCommentToPost = async (req, res) => {
 
         const comment = new Comment({
             postId: postId,
-            userId: req.user.userId,
+            user: req.user.userId,
             content
         });
 
@@ -37,7 +37,8 @@ export const addCommentToPost = async (req, res) => {
 
         return res.status(201).json({
             success: true,
-            message: "Comment added Successfully"
+            message: "Comment added Successfully",
+            comment
         })
     } catch (error) {
         console.error("Error adding comment to post:", error);
@@ -47,6 +48,29 @@ export const addCommentToPost = async (req, res) => {
         });
     }
 };
+
+// Get all comments of a post
+export const getComments = async (req, res) => {
+    const { postId } = req.params;
+    try {
+        if (!isValidObjectId(postId)) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid post ID"
+            });
+        }
+        const comments = await Comment.find({ postId }).populate('user', 'username headline profilePicture')
+
+        return res.status(200).json({
+            success: true,
+            comments
+        });
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 
 // Controller to delete a comment
 export const deleteComment = async (req, res) => {

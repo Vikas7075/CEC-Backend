@@ -35,7 +35,7 @@ app.use("/api/experiance", experianceRoutes);
 app.use("/api/education", educationRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/likes", likeRoutes);
-app.use("/api/posts", commentRoutes);
+app.use("/api/post/comment", commentRoutes);
 
 
 app.get('/', (req, res) => {
