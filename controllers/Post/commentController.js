@@ -71,6 +71,20 @@ export const getComments = async (req, res) => {
     }
 }
 
+// Get all comments 
+export const getAllComments = async (req, res) => {
+    try {
+        const comments = await Comment.find().populate('user', 'username headline profilePicture');
+
+        return res.status(200).json({
+            success: true,
+            comments
+        });
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
 
 // Controller to delete a comment
 export const deleteComment = async (req, res) => {
@@ -93,7 +107,7 @@ export const deleteComment = async (req, res) => {
         }
 
         // Check if the user has permission to delete the comment
-        if (comment.userId.toString() !== req.user.userId) {
+        if (comment.user._id.toString() !== req.user.userId) {
             return res.status(403).json({
                 success: false,
                 message: "You are not authorized to delete this comment"
@@ -101,7 +115,7 @@ export const deleteComment = async (req, res) => {
         }
 
         // Remove the comment from the post's comments array
-        await Post.findByIdAndUpdate(comment.post, { $pull: { comments: commentId } });
+        await Post.findByIdAndUpdate(comment.postId, { $pull: { comments: commentId } });
 
         await Comment.findByIdAndDelete(commentId);
 

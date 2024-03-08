@@ -21,7 +21,6 @@ export const create = async (req, res) => {
         );
 
         if (!updatedUser) {
-            console.error("User not found");
             return res.status(404).json({
                 success: false,
                 message: "User not found"

@@ -9,6 +9,8 @@ import educationRoutes from './routes/education.routes.js'
 import postRoutes from './routes/Post/post.routes.js'
 import likeRoutes from './routes/Post/like.routes.js';
 import commentRoutes from './routes/Post/comment.routes.js';
+import connectionRoutes from './routes/connection.routes.js';
+import messagesRoutes from './routes/message.routes.js';
 
 
 app.use(express.json())
@@ -16,7 +18,7 @@ app.use(express.json())
 app.use(express.static('uploads'))
 
 app.use(cookieParser())  // cookie related data handled and work that receive in user browser
-
+console.log(process.env.CORS_ORIGIN);
 dotenv.config({
     path: './.env'
 })
@@ -36,6 +38,8 @@ app.use("/api/education", educationRoutes);
 app.use("/api/post", postRoutes);
 app.use("/api/likes", likeRoutes);
 app.use("/api/post/comment", commentRoutes);
+app.use("/api", connectionRoutes);
+app.use("/api/messages", messagesRoutes);
 
 
 app.get('/', (req, res) => {

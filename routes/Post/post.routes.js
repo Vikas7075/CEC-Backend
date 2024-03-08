@@ -1,8 +1,9 @@
 import express from 'express';
 import multer from 'multer';
-import { createPost, deletePost, getAllPosts, getPostById, updatePost } from '../../controllers/Post/postController.js';
+import { createPost, deletePost, getAllPosts, getPostById, getPostByPostId, deletePostByPostId, updatePost } from '../../controllers/Post/postController.js';
 import { verifyToken } from '../../middleware/auth.middleware.js';
 import uploadToCloudinary from '../../utils/cloudinaryUpload.js';
+import { isAdmin } from '../../middleware/isAdmin.js';
 
 const router = express.Router();
 const storage = multer.memoryStorage();
@@ -44,8 +45,11 @@ router.post('/', verifyToken, upload.single('image'), uploadToCloudinary, create
 
 //router.post('/', verifyToken, uploadToCloudinary, createPost); // Using multer to handle single file upload with field name 'image'
 router.get('/', getAllPosts);
+router.get('/admin/', verifyToken, isAdmin, getAllPosts);
 router.get('/:userId', verifyToken, getPostById);
+router.get('/:postId/admin', verifyToken, isAdmin, getPostByPostId);
 router.delete('/:id', deletePost);
+router.delete('/:postId/admin', verifyToken, isAdmin, deletePostByPostId);
 router.put('/:id', updatePost);
 
 export default router;

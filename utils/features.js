@@ -1,12 +1,11 @@
 import jwt from 'jsonwebtoken'
 
 export const setCookie = (user, res, message, statusCode = 200) => {
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-
+    const token = jwt.sign({ userId: user._id, role: user.role }, process.env.JWT_SECRET);
     // set cookie with the jwt token
     res.cookie('token', token, {
         httpOnly: true,
-        maxAge: 30 * 60 * 1000,
+        maxAge: 60 * 60 * 1000,
         sameSite: process.env.Node_env === "development" ? "lax" : "none",
         secure: process.env.Node_env === "development" ? false : true
     })

@@ -43,6 +43,29 @@ export const getPostById = async (req, res) => {
     }
 }
 
+// get post by postId   
+export const getPostByPostId = async (req, res) => {
+    const { postId } = req.params;
+    console.log(req.params.postId); //--> comment
+    try {
+        const post = await Post.findById(postId).populate('user', 'username headline profilePicture')
+            .populate({
+                path: 'comments',
+                populate: {
+                    path: 'user',
+                    select: 'username profilePicture headline' // Populate user details for each comment
+                }
+            });
+        res.status(200).json({
+            success: true,
+            post
+        })
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
 // create a new post
 
 // Multer storage configuration for uploading files
@@ -88,11 +111,29 @@ export const updatePost = async (req, res) => {
     }
 }
 
-//deleting Post
+//deleting Post by userId
 export const deletePost = async (req, res) => {
     try {
         const { id } = req.params;
         const deletedPost = await Post.findByIdAndDelete(id);
+        if (!deletedPost) {
+            return res.status(404).json({ error: 'Post not found' });
+        }
+        res.status(200).json({
+            success: true,
+            message: "Post deleted successfully"
+        })
+    } catch (error) {
+        console.error('Error deleting posts:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+// deleteing post by postId
+//deleting Post by userId
+export const deletePostByPostId = async (req, res) => {
+    try {
+        const { postId } = req.params;
+        const deletedPost = await Post.findByIdAndDelete(postId);
         if (!deletedPost) {
             return res.status(404).json({ error: 'Post not found' });
         }
