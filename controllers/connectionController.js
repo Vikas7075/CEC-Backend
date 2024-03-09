@@ -6,6 +6,13 @@ export const sendConnectionRequest = async (req, res) => {
         const { userId } = req.params;
         const senderId = req.user.userId;
 
+        // Check if the sender is trying to send a request to themselves
+        if (senderId === userId) {
+            return res.status(400).json({
+                success: false,
+                message: "Cannot send connection request to yourself"
+            });
+        }
         //check if user is exits
         const receiver = await User.findById(userId);
         if (!receiver) {
