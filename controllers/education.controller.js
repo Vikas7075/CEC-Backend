@@ -47,7 +47,7 @@ export const getEducation = async (req, res) => {
     try {
         const educationRecords = await Education.find({ user: userId });
 
-        if (!educationRecords) {
+        if (!educationRecords || educationRecords.length === 0) {
             return res.status(404).json({
                 success: false,
                 message: "Education records not found for the user"

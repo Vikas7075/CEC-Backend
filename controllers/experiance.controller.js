@@ -49,7 +49,6 @@ export const create = async (req, res) => {
 export const getExperience = async (req, res) => {
     try {
         const { userId } = req.params;
-        console.log(userId)
         // Find experience records for the specified user ID
         const experienceRecords = await Experience.find({ user: userId });
 
