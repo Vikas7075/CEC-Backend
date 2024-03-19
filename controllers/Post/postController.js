@@ -97,14 +97,22 @@ export const createPost = async (req, res) => {
 export const updatePost = async (req, res) => {
     try {
         const { id } = req.params;
-        const { content } = req.body;
-        const updatePost = await Post.findByIdAndUpdate(id, { content }, { new: true })
+        const { content, image } = req.body;
+        const updateField = { content };
+        if (image) {
+            updateField.image = image;
+        }
+        const updatePost = await Post.findByIdAndUpdate(id, updateField, { new: true })
         if (!updatePost) {
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false,
                 message: "Post not found"
             })
         }
+        res.status(200).json({
+            success: true,
+            message: "Post Updated successfully"
+        })
     } catch (error) {
         console.error('Error updating posts:', error);
         res.status(500).json({ error: 'Internal Server Error' });

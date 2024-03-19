@@ -15,7 +15,8 @@ console.log(key);
 const uploadToCloudinary = async (req, res, next) => {
     try {
         if (!req.file) {
-            return res.status(400).json({ error: 'No image file provided' });
+            return next();
+            // return res.status(400).json({ error: 'No image file provided' });
         }
 
         // Write buffer data to a temporary file

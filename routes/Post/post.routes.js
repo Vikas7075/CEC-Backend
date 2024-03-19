@@ -48,8 +48,8 @@ router.get('/', getAllPosts);
 router.get('/admin/', verifyToken, isAdmin, getAllPosts);
 router.get('/:userId', verifyToken, getPostById);
 router.get('/:postId/admin', verifyToken, isAdmin, getPostByPostId);
-router.delete('/:id', deletePost);
+router.delete('/:id', verifyToken, deletePost);
 router.delete('/:postId/admin', verifyToken, isAdmin, deletePostByPostId);
-router.put('/:id', updatePost);
+router.put('/:id', verifyToken, upload.single('image'), uploadToCloudinary, updatePost);
 
 export default router;
