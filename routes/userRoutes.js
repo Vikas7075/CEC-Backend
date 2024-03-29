@@ -16,11 +16,8 @@ router.post("/logout", verifyToken, logout);
 router.get("/", verifyToken, myprofile);
 router.get("/:userId", verifyToken, getUserById);
 router.get("/all/users", verifyToken, getAllUsers);
-router.get("/admin/all", verifyToken, isAdmin, getAllUsers);
 
 router.put("/:userId", verifyToken, updateUser);
 router.delete("/:userId", verifyToken, deleteUser);
-router.delete("/admin/:userId", verifyToken, isAdmin, deleteUser);
-router.delete("/:userId/admin", verifyToken, isAdmin, deleteUser);
 
 export default router;

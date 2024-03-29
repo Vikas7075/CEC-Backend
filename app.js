@@ -11,6 +11,7 @@ import likeRoutes from './routes/Post/like.routes.js';
 import commentRoutes from './routes/Post/comment.routes.js';
 import connectionRoutes from './routes/connection.routes.js';
 import messagesRoutes from './routes/message.routes.js';
+import adminRoutes from './routes/adminRoutes.js'
 
 
 app.use(express.json())
@@ -40,6 +41,7 @@ app.use("/api/likes", likeRoutes);
 app.use("/api/post/comment", commentRoutes);
 app.use("/api", connectionRoutes);
 app.use("/api/messages", messagesRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 app.get('/', (req, res) => {
